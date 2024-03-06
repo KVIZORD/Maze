@@ -1,46 +1,23 @@
-cmake_minimum_required(VERSION 3.10)
+project(Maze)
 
-project(MazeAll)
+find_package(QT NAMES Qt6 Qt5 COMPONENTS Widgets REQUIRED)
+find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Widgets REQUIRED)
 
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
-add_compile_options(-Wall -Wextra -pedantic -Werror)
+set(CMAKE_AUTOUIC ON)
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
 
-if(CMAKE_BUILD_TYPE MATCHES "^Debug")
-  add_compile_options(-g -O0)
-else()
-  add_compile_options(-O3 -DNDEBUG)
-endif()
-
-set(BASE_DIR "${CMAKE_CURRENT_SOURCE_DIR}")
-set(ADAPTER_DIR "${BASE_DIR}/source/adapter")
-set(COMMON_DIR "${BASE_DIR}/source/common")
-set(MODEL_DIR "${BASE_DIR}/source/model")
-set(VIEW_DIR "${BASE_DIR}/source/view")
-set(ASSETS_DIR "${BASE_DIR}/assets")
-
-set(HEADER_DIRS "${BASE_DIR}/source")
-
-file(GLOB_RECURSE MODEL_SOURCES "${MODEL_DIR}/*.cc" "${MODEL_DIR}/*.h")
-file(GLOB_RECURSE VIEW_SOURCES "${VIEW_DIR}/*.cc" "${VIEW_DIR}/*.h" "${VIEW_DIR}/*.ui")
-file(GLOB_RECURSE ADAPTER_SOURCES "${ADAPTER_DIR}/*.cc" "${ADAPTER_DIR}/*.h")
-file(GLOB_RECURSE COMMON_SOURCES "${COMMON_DIR}/*.cc" "${COMMON_DIR}/*.h")
-file(GLOB_RECURSE ALL_SOURCES "${BASE_DIR}/*.cc" "${BASE_DIR}/*.h")
-
-add_custom_target(format
-    COMMAND clang-format --style=Google -i --verbose ${ALL_SOURCES}
+add_executable(${PROJECT_NAME}
+    main.cc
+    ${MODEL_SOURCES}
+    ${COMMON_SOURCES}
+    ${VIEW_SOURCES}
+    ${ADAPTER_SOURCES}
+    ${VIEW_UIS}
 )
 
-add_custom_target(stylecheck
-    COMMAND clang-format --style=Google -n --verbose ${ALL_SOURCES}
-)
+target_include_directories(${PROJECT_NAME} PUBLIC ${HEADERS_RELATIVE_DIR})
 
-add_custom_target(cppcheck
-    COMMAND cppcheck --enable=all --suppress=missingInclude --inconclusive --check-config ${ALL_SOURCES}
-)
-
-add_subdirectory(source)
-
-enable_testing()
-add_subdirectory(tests)
+target_link_libraries(${PROJECT_NAME} PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)

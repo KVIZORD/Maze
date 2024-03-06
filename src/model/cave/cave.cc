@@ -69,38 +69,4 @@ size_t Cave::get_number_living_neighbors(size_t row, size_t col) {
   return number;
 }
 
-void Cave::print() const {
-  for (size_t i = 0; i < rows_ + 2; i++) {
-    if (i == 0) {
-      std::cout << "+-";
-    } else if (i == rows_ + 1) {
-      std::cout << "-+";
-    } else {
-      std::cout << "---";
-    }
-  }
-  std::cout << std::endl;
-  for (size_t i = 0; i < rows_; i++) {
-    std::cout << "| ";
-    for (size_t j = 0; j < cols_; j++) {
-      if (grid_[i][j]) {
-        std::cout << " . ";
-      } else {
-        std::cout << " " << static_cast<char>(219) << " ";
-      }
-    }
-    std::cout << " |" << std::endl;
-  }
-  for (size_t i = 0; i < rows_ + 2; i++) {
-    if (i == 0) {
-      std::cout << "+-";
-    } else if (i == rows_ + 1) {
-      std::cout << "-+";
-    } else {
-      std::cout << "---";
-    }
-  }
-  std::cout << std::endl;
-}
-
 }  // namespace s21
